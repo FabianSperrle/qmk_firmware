@@ -21,6 +21,8 @@ enum planck_layers {
   _QWERTZ,
   _LOWER,
   _RAISE,
+  _FUNC,
+  _GAMING,
   _ADJUST
 };
 
@@ -29,24 +31,29 @@ enum planck_keycodes {
   QWERTZ,
   LOWER,
   RAISE,
+  FUNC,
   BACKLIT,
+  GAMING
 };
 
 enum {
-    SH_CP = 0
+    SH_CP = 0,
+    PRV_NXT = 1,
+    SEM = 2
 };
 
 
-//Tap Dance Definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-  //Tap once for Esc, twice for Caps Lock
-  [SH_CP]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
-  // Other declarations would go here, separated by commas, if you have them
-};
+#define ALT_INS LALT(KC_INS)
+
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
+
+#define M_AE M(1)
+#define M_UE M(2)
+#define M_OE M(3)
+#define M_SS M(4)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -56,16 +63,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Shift |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise | Left | Down |  Up  |Right |
+ * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise | Left | Down |  Up  |Enter |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
-  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC},
-  {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
-  {TD(SH_CP), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_T(KC_ENT) },
-  {BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
+  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC},
+  {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    TD(SEM), KC_QUOT},
+  {TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT },
+  {FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE, _______, _______, _______, KC_ENT}
 },
 
 /* Qwertz
@@ -82,52 +89,87 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTZ] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     S(DE_UE)},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    S(DE_OE), S(DE_AE)},
-  {TD(SH_CP), KC_Y,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_MINS,  SFT_T(KC_ENT) },
-  {BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,    KC_RGHT}
+  {TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT },
+  {FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,    KC_ENT}
 },
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  |   ]  |
+ * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
+ * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   +  | Pg Up|Pg Dn |  |   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | | Home | End  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |      |      |      |      |  Del |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = {
-  {KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_RBRC},
-  {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE},
+  {KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    _______, _______, _______},
+  {_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS,    KC_PLUS,    KC_PGUP, KC_PGDN, KC_PIPE},
   {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_HOME, KC_END,  _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______,    KC_MNXT,    KC_VOLD, KC_VOLU, KC_MPLY}
+  {_______, _______, _______, _______, _______, _______, KC_DEL,  _______,    _______,    _______, _______, _______}
 },
 
 /* Raise
  * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * |   `  |   1  |   2  |   3  |      |      |      |      |      |   {  |   }  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
+ * |      |   4  |   5  |   6  |      |      |      |   =  |   _  |   (  |   )  |  \   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |Pg Up |Pg Dn |      |
+ * |      |   7  |   8  |   9  |      |      |      |ISO # |ISO / |   [  |   ]  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |   0  |      |      |             |      | Play | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = {
-  {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC},
-  {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS},
-  {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+  {KC_GRV,  KC_1,    KC_2,    KC_3,    _______, _______, _______, _______, _______, KC_LCBR, KC_RCBR, KC_BSPC},
+  {_______, KC_4,    KC_5,    KC_6,    _______, _______, _______, KC_EQL,  KC_UNDS, KC_LPRN, KC_RPRN, KC_BSLS},
+  {_______, KC_7,    KC_8,    KC_9,    _______, _______, _______, KC_NUHS, KC_NUBS, KC_LBRC, KC_RBRC, _______},
+  {_______, XXXXXXX, KC_0,    XXXXXXX, _______, _______, _______, _______, KC_MPLY, KC_VOLD, KC_VOLU, TD(PRV_NXT)}
 },
 
+/* Function
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |      |      |      |   Ü  |AltIns|   Ö  |      |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |   Ä  |   ß  |      |      |      | Left |Right | Down |  Up  |      |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_FUNC] = {
+  {_______, _______,  _______, _______, _______, _______, _______, M(1), ALT_INS, M(2), _______, BACKLIT},
+  {_______, M(3), M(4), _______, _______, _______, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT,  _______, _______},
+  {_______, _______,  _______, _______, _______, _______, _______, _______,  _______, _______,  _______, _______},
+  {_______, _______,  _______, _______, _______, _______, _______, _______,  _______, _______,  _______, _______}
+},
+
+/* Gaming
+ * ,-----------------------------------------------------------------------------------.
+ * | Reset|      |      |      |      |      |  ESC |   1  |   2  |   3  |   4  |   5  |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  TAB |   Q  |   W  |   E  |   R  |   6  |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  ALT |   A  |   S  |   D  |   F  |   7  |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      | Shift|   Z  |   X  |   C  |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_GAMING] = {
+  {QWERTY,  _______, _______, _______, _______, _______, KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5},
+  {_______, _______, _______, _______, _______, _______, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_6},
+  {_______, _______, _______, _______, _______, _______, KC_LALT, KC_A, KC_S, KC_D, KC_F, M(0)},
+  {_______, _______, _______, _______, _______, _______, KC_LSFT, KC_Z, KC_X, KC_C, KC_SPC, KC_SPC}
+},
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
  * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|Qwertz|      |      |      |
+ * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|Qwertz|Gaming|      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -136,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = {
   {_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL },
-  {_______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  QWERTZ,  _______, _______, _______},
+  {_______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  QWERTZ,  GAMING,  _______, _______},
   {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 }
@@ -164,12 +206,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case QWERTY:
       if (record->event.pressed) {
         persistant_default_layer_set(1UL<<_QWERTY);
+        PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
       }
       return false;
       break;
     case QWERTZ:
       if (record->event.pressed) {
         persistant_default_layer_set(1UL<<_QWERTZ);
+        PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
       }
       return false;
       break;
@@ -193,6 +237,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case FUNC:
+      if (record->event.pressed) {
+        layer_on(_FUNC);
+      } else {
+        layer_off(_FUNC);
+      }
+      return false;
+      break;
+    case GAMING:
+      if (record->event.pressed) {
+        persistant_default_layer_set(1UL<<_GAMING);
+        PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
+      }
+      return false;
+      break;
     case BACKLIT:
       if (record->event.pressed) {
         register_code(KC_RSFT);
@@ -207,6 +266,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
+  if (record->event.pressed) {
+    switch(id) {
+      case 0:
+        return MACRO(T(7), T(8), END);
+      case 1: // UE
+        return MACRO(D(LALT), T(LSFT), U(LALT), T(LBRC), D(LALT), T(LSFT), U(LALT), END);
+      case 2: // OE
+        return MACRO(D(LALT), T(LSFT), U(LALT), T(SCLN), D(LALT), T(LSFT), U(LALT), END);
+      case 3: // AE
+        return MACRO(D(LALT), T(LSFT), U(LALT), T(QUOT), D(LALT), T(LSFT), U(LALT), END);
+      case 4: // SS
+        return MACRO(D(LALT), T(LSFT), U(LALT), T(MINS), D(LALT), T(LSFT), U(LALT), END);
+    }
+  }
+  return MACRO_NONE;
+};
+
 
 void matrix_init_user(void) {
     #ifdef AUDIO_ENABLE
@@ -238,5 +316,36 @@ void music_scale_user(void)
 {
     PLAY_NOTE_ARRAY(music_scale, false, 0);
 }
+
+void td_sem(qk_tap_dance_state_t *state, void *user_data) {
+    switch(state->count) {
+        case 1:
+            register_code(KC_SCLN);
+            unregister_code(KC_SCLN);
+            break;
+        case 2:
+            register_code(KC_ESC);
+            unregister_code(KC_ESC);
+            register_code(KC_LSFT);
+            register_code(KC_A);
+            unregister_code(KC_A);
+            unregister_code(KC_LSFT);
+            register_code(KC_SCLN);
+            unregister_code(KC_SCLN);
+            register_code(KC_ESC);
+            unregister_code(KC_ESC);
+            break;
+    }
+}
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  //Tap once for Esc, twice for Caps Lock
+  [SH_CP]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
+  // Double tap media next for media prev
+  [PRV_NXT]  = ACTION_TAP_DANCE_DOUBLE(KC_MNXT, KC_MPRV),
+  // Double tap ; to get out of insert mode and append ; at the end of the line
+  [SEM] = ACTION_TAP_DANCE_FN(td_sem)
+};
 
 #endif
