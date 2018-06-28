@@ -39,7 +39,8 @@ enum planck_keycodes {
 enum {
     SH_CP = 0,
     PRV_NXT = 1,
-    SEM = 2
+    SEM = 2,
+    TT = 3
 };
 
 
@@ -65,14 +66,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Shift |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise | Left | Down |  Up  |Enter |
+ * | Brite| GUI  | Alt  | Ctrl |Lower |Space | Bksp |Raise | Left | Down |  Up  |Enter |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
-  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC},
+  {TD(TT),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    TD(SEM), KC_QUOT},
   {TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT },
-  {FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE, _______, _______, _______, KC_ENT}
+  {FUNC,    KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,  KC_BSPC, RAISE, LALT(LCTL(KC_DEL)), _______, KC_RCTL, KC_ENT}
 },
 
 /* Qwertz
@@ -83,14 +84,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Y  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   -  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise | Left | Down |  Up  |Right |
+ * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise |CAltDl|      | Ctrl |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTZ] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     S(DE_UE)},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    S(DE_OE), S(DE_AE)},
   {TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT },
-  {FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,    KC_ENT}
+  {FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE,   LALT(LCTL(KC_DEL)), _______, KC_RCTL,    KC_ENT}
 },
 
 /* Lower
@@ -169,7 +170,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|Qwertz|Gaming|      |      |
+ * |      |      |      |Aud on|Audoff|      |      |Qwerty|Qwertz|Gaming|      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -178,7 +179,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = {
   {_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL },
-  {_______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  QWERTZ,  GAMING,  _______, _______},
+  {_______, _______, _______, AU_ON,   AU_OFF,  _______, _______, QWERTY,  QWERTZ,  GAMING,  _______, _______},
   {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 }
@@ -254,12 +255,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case BACKLIT:
       if (record->event.pressed) {
-        register_code(KC_RSFT);
         #ifdef BACKLIGHT_ENABLE
           backlight_step();
         #endif
-      } else {
-        unregister_code(KC_RSFT);
       }
       return false;
       break;
@@ -335,17 +333,66 @@ void td_sem(qk_tap_dance_state_t *state, void *user_data) {
             register_code(KC_ESC);
             unregister_code(KC_ESC);
             break;
+        default:
+            for (int i = 0; i < state->count; i++) {
+                register_code(KC_SCLN);
+                unregister_code(KC_SCLN);
+            }
+            break;
+    }
+}
+
+void double_tab(qk_tap_dance_state_t *state, void *user_data) {
+    switch(state->count) {
+        case 1:
+            register_code(KC_TAB);
+            unregister_code(KC_TAB);
+            break;
+        case 2:
+            register_code(KC_LSFT);
+            register_code(KC_TAB);
+            unregister_code(KC_TAB);
+            unregister_code(KC_LSFT);
+            break;
+        default:
+            for (int i = 0; i < state->count; i++) {
+                register_code(KC_TAB);
+                unregister_code(KC_TAB);
+            }
+            break;
+    }
+}
+
+void shift_lock_each(qk_tap_dance_state_t *state, void *user_data) {
+    register_code(KC_LSFT);
+}
+
+void shift_lock_cancel(qk_tap_dance_state_t *state, void *user_data) {
+    for (int i = 0; i < state->count; i++) {
+        unregister_code(KC_LSFT);
+    }
+}
+
+
+void shift_lock_complete(qk_tap_dance_state_t *state, void *user_data) {
+    switch(state->count) {
+        case 3:
+            register_code(KC_CAPS);
+            unregister_code(KC_CAPS);
+            break;
     }
 }
 
 //Tap Dance Definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
   //Tap once for Esc, twice for Caps Lock
-  [SH_CP]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
+  [SH_CP]  = ACTION_TAP_DANCE_FN_ADVANCED(shift_lock_each, shift_lock_complete, shift_lock_cancel), // ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
   // Double tap media next for media prev
   [PRV_NXT]  = ACTION_TAP_DANCE_DOUBLE(KC_MNXT, KC_MPRV),
   // Double tap ; to get out of insert mode and append ; at the end of the line
-  [SEM] = ACTION_TAP_DANCE_FN(td_sem)
+  [SEM] = ACTION_TAP_DANCE_FN(td_sem),
+  // Double tap TAB to tab backwards
+  [TT] = ACTION_TAP_DANCE_FN(double_tab)
 };
 
 #endif
