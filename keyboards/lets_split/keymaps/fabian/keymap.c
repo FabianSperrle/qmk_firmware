@@ -69,11 +69,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Brite| GUI  | Alt  | Ctrl |Lower |Space | Bksp |Raise | Left | Down |  Up  |Enter |
  * `-----------------------------------------------------------------------------------'
  */
-[_QWERTY] = KEYMAP( \
+[_QWERTY] = LAYOUT_ortho_4x12( \
   TD(TT),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_LBRC, \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    TD(SEM), KC_QUOT, \
   TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT , \
-  FUNC,    KC_LGUI, KC_LALT, KC_LCTL, LOWER,   KC_SPC,  KC_BSPC, RAISE, LALT(LCTL(KC_DEL)), _______, KC_RCTL, KC_ENT \
+  FUNC,    KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_BSPC, RAISE, LALT(LCTL(KC_DEL)), _______, KC_RCTL, KC_ENT \
 ),
 
 /* Qwertz
@@ -87,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Brite| Ctrl | Alt  | GUI  |Lower |Space | Bksp |Raise |CAltDl|      | Ctrl |Right |
  * `-----------------------------------------------------------------------------------'
  */
-[_QWERTZ] = KEYMAP( \
+[_QWERTZ] = LAYOUT_ortho_4x12( \
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Z,    KC_U,    KC_I,    KC_O,    KC_P,     S(DE_UE), \
   KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    S(DE_OE), S(DE_AE), \
   TD(SH_CP), KC_Z,  KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT , \
@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |      |  Del |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_LOWER] = KEYMAP( \
+[_LOWER] = LAYOUT_ortho_4x12( \
   KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    _______, _______, _______, \
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS,    KC_PLUS,    KC_PGUP, KC_PGDN, KC_PIPE, \
   _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_HOME, KC_END,  _______, \
@@ -123,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |   0  |      |      |             |      | Play | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
  */
-[_RAISE] = KEYMAP( \
+[_RAISE] = LAYOUT_ortho_4x12( \
   KC_GRV,  KC_1,    KC_2,    KC_3,    _______, _______, _______, _______, _______, KC_LCBR, KC_RCBR, KC_BSPC, \
   _______, KC_4,    KC_5,    KC_6,    _______, _______, _______, KC_EQL,  KC_UNDS, KC_LPRN, KC_RPRN, KC_BSLS, \
   _______, KC_7,    KC_8,    KC_9,    _______, _______, _______, KC_NUHS, KC_NUBS, KC_LBRC, KC_RBRC, _______, \
@@ -141,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_FUNC] = KEYMAP( \
+[_FUNC] = LAYOUT_ortho_4x12( \
   _______, _______,  _______, _______, _______, _______, _______, M(1), ALT_INS, M(2), _______, BACKLIT, \
   _______, M(3), M(4), _______, _______, _______, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT,  _______, _______, \
   _______, _______,  _______, _______, _______, _______, _______, _______,  _______, _______,  _______, _______, \
@@ -159,7 +159,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |      | Shift|   Z  |   X  |   C  |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_GAMING] = KEYMAP( \
+[_GAMING] = LAYOUT_ortho_4x12( \
   QWERTY,  _______, _______, _______, _______, _______, KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, \
   _______, _______, _______, _______, _______, _______, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_6, \
   _______, _______, _______, _______, _______, _______, KC_LALT, KC_A, KC_S, KC_D, KC_F, M(0), \
@@ -177,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_ADJUST] = KEYMAP( \
+[_ADJUST] = LAYOUT_ortho_4x12( \
   _______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL , \
   _______, _______, _______, AU_ON,   AU_OFF,  _______, _______, QWERTY,  QWERTZ,  GAMING,  _______, _______, \
   _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______, \
@@ -300,6 +300,8 @@ void music_scale_user(void)
     PLAY_NOTE_ARRAY(music_scale, false, 0);
 }
 
+#endif
+
 void td_sem(qk_tap_dance_state_t *state, void *user_data) {
     switch(state->count) {
         case 1:
@@ -380,4 +382,3 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [TT] = ACTION_TAP_DANCE_FN(double_tab)
 };
 
-#endif

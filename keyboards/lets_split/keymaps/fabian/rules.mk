@@ -4,6 +4,8 @@
 #
 # UNICODE_ENABLE = yes
 
+TAP_DANCE_ENABLE = yes
+BOOTMAGIC_ENABLE = false
 ifndef QUANTUM_DIR
 	include ../../../../Makefile
 endif
